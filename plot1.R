@@ -4,7 +4,8 @@
 #This code assumes that the file "household_power_consumption.txt" is in the working directory
 
 #Load all the data to memory
-rawData<-read.csv("household_power_consumption.txt",sep=";")
+#rawData<-read.csv("household_power_consumption.txt",sep=";")
+rawData<-read.table("household_power_consumption.txt", header=TRUE, sep=";", stringsAsFactors=FALSE, dec=".")
 #Coerces the date column to a Date object
 rawData$Date<-as.Date(rawData$Date,"%d/%m/%Y")
 #Establish the initial date we will work with
@@ -18,8 +19,8 @@ workingData[,workingData[,3:9]=="?"]<-NA
 #Coerce to numeric Values
 workingData$Global_active_power<-as.numeric(workingData$Global_active_power)
 #Plot the histogram to screen
-par(mfrow = (1,1))
-hist(workingData$Global_active_power/1000,main = "Global Active Power",col="red",xlab = "Global Active Power (kwatts)")
+par(mfrow = c(1,1))
+hist(workingData$Global_active_power,main = "Global Active Power",col="red",xlab = "Global Active Power (kwatts)")
 #Export to a png device
 #Copy the graphic to another device with the specified size
 dev.copy(png,file ="plot1.png",width = 480, height = 480, units = "px", pointsize = 12)

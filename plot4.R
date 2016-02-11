@@ -4,7 +4,8 @@
 #This code assumes that the file "household_power_consumption.txt" is in the working directory
 
 #Load all the data to memory
-rawData<-read.csv("household_power_consumption.txt",sep=";")
+#rawData<-read.csv("household_power_consumption.txt",sep=";")
+rawData<-read.table("household_power_consumption.txt", header=TRUE, sep=";", stringsAsFactors=FALSE, dec=".")
 #Coerces the date column Time to a Date Time object into the Time variable
 rawData$Time<-strptime(paste(rawData$Date,rawData$Time),"%d/%m/%Y %H:%M:%S")
 #Establish the initial date we will work with
@@ -19,7 +20,8 @@ remove("rawData")
 workingData[,workingData[,2:8]=="?"]<-NA
 
 #Multiple Base Plots
-par(mfrow = c(2,2), mar=c(1,4,4,1), oma=c(1,3,0,1))#Two column graph, two row graphs
+png("plot4.png",width = 480, height = 480, units = "px")
+par(mfrow = c(2,2))#Two column graph, two row graphs
 
 #Coerce to numeric Values
 workingData$Sub_metering_1<-as.numeric(workingData$Sub_metering_1)
@@ -31,7 +33,7 @@ workingData$Global_reactive_power<-as.numeric(workingData$Global_reactive_power)
 #First Plot
   #Filter Nas
 noNas<-!is.na(workingData$Global_active_power)
-plot(workingData$Time[noNas],workingData$Global_active_power[noNas]/1000, xlab = "", ylab= "Global Active Power", type="l")
+plot(workingData$Time[noNas],workingData$Global_active_power[noNas], xlab = "", ylab= "Global Active Power", type="l")
 
 #Second Plot
   #Filter Nas
@@ -49,7 +51,7 @@ par(new="TRUE")
 plot(workingData$Time[noNas],workingData$Sub_metering_2[noNas],pch="-", xlab = "", ylab= "Energy sub metering", type="l", col="red", ylim=c(0, 35))
 par(new="TRUE")
 plot(workingData$Time[noNas],workingData$Sub_metering_3[noNas], xlab = "", ylab= "Energy sub metering",ylim=c(0, 35),type="l", col="blue")
-legend("topright",pch="-",col=c("black","red","blue"),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),cex = 0.6)
+legend("topright", lty=1, lwd=2, col=c("black", "red", "blue"), legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3") )
 
 #Fourth Plot
 #Filter Nas
@@ -59,7 +61,7 @@ plot(workingData$Time[noNas],workingData$Global_reactive_power[noNas], xlab = "d
 
 #Export to a png device
 #Copy the graphic to another device with the specified size
-dev.copy(png,file ="plot4.png",width = 480, height = 480, units = "px", pointsize = 12)
+#dev.copy(png,file ="plot4.png",width = 480, height = 480, units = "px", pointsize = 12)
 #Close the png device.
 dev.off()
 #Reset the display
